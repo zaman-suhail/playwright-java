@@ -4,8 +4,7 @@ import com.microsoft.playwright.Page;
 
 public class LoginPage {
 
-
-    Page page;
+    private final  Page page;
 
 
     private String userNameField = "//input[@id='user-name']";

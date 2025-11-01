@@ -1,32 +1,18 @@
 package org.swaglabs.tests;
-
-import com.microsoft.playwright.*;
 import org.swaglabs.pages.LoginPage;
 import org.swaglabs.pages.ProductPage;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.swaglabs.base.BaseTest;
 import org.testng.annotations.Test;
 
-public class LoginTest {
+public class LoginTest extends BaseTest {
 
-    Playwright playwright;
-    Browser browser;
-    BrowserContext browserContext;
-    Page page;
     LoginPage loginPage;
     ProductPage productPage;
 
 
-    @BeforeClass
-    public void setup(){
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-        browserContext = browser.newContext();
-        page = browserContext.newPage();
-    }
 
-    @Test
+    @Test(priority = 1)
     public void verifyLoginPageLoadsSuccessfully(){
 
         loginPage = new LoginPage(page);
@@ -36,7 +22,7 @@ public class LoginTest {
 
 
 
-    @Test
+    @Test(priority = 2)
     public void loginWithValidCredentialsShouldNavigateToProductList() {
 
         loginPage = new LoginPage(page);
@@ -49,10 +35,5 @@ public class LoginTest {
 
 
 
-    @AfterClass
-    public void teardown(){
-        browser.close();
-        page.close();
-    }
 
 }
