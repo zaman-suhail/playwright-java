@@ -1,10 +1,10 @@
 package org.swaglabs.pages;
 
 import com.microsoft.playwright.Page;
+import org.swaglabs.base.BasePage;
 
-public class LoginPage {
+public class LoginPage extends BasePage {
 
-    private final  Page page;
 
 
     private String userNameField = "//input[@id='user-name']";
@@ -13,40 +13,40 @@ public class LoginPage {
     private String loginLogo = "//div[@class='login_logo']";
 
   public LoginPage(Page page){
-        this.page = page;
+        super(page);
     }
 
 
 
     public void enterUserName(String username) {
 
-      page.locator(this.userNameField).fill(username);
+      type(userNameField, username);
 
     }
 
 
     public void enterPassword(String password) {
 
-        page.locator(this.passwordField).fill(password);
+       type(passwordField, password);
 
     }
 
 
     public void clickLogin() {
 
-        page.locator(this.loginButton).click();
+       click(loginButton);
 
     }
 
 
     public void login(String username, String password){
-      page.locator(this.userNameField).fill(username);
-      page.locator(this.passwordField).fill(password);
-      page.locator(this.loginButton).click();
+      type(userNameField, username);
+      type(passwordField,password);
+      click(loginButton);
     }
 
     public boolean isLogoVisible(){
-       return  page.locator(this.loginLogo).isVisible();
+      return isVisible(loginLogo);
 
     }
 
