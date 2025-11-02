@@ -7,10 +7,11 @@ import java.util.Properties;
 
 public class BrowserFactory {
 
-  private  static    Playwright playwright;
-  private  static    Browser browser;
-  private static    BrowserContext browserContext;
-  private static    Page page;
+  private  static    ThreadLocal<Playwright>  playwrightThread = new ThreadLocal<>();
+  private  static    ThreadLocal<Browser> browserThread = new ThreadLocal<>();
+  private static    ThreadLocal<BrowserContext> browserContextThread = new ThreadLocal<>();
+  private static    ThreadLocal<Page> pageThread = new ThreadLocal<>();
+
   private static ConfigReader config;
   private static Properties prop;
 
@@ -26,39 +27,49 @@ public class BrowserFactory {
       String browserName = prop.getProperty("browser");
       boolean isHeadless = Boolean.parseBoolean(prop.getProperty("headless"));
 
-      playwright = Playwright.create();
+      playwrightThread.set(Playwright.create());
 
       BrowserType browserType;
 
       switch (browserName.toLowerCase()){
-          case "firefox" : browserType = playwright.firefox();
+          case "firefox" : browserType = playwrightThread.get().firefox();
           break;
 
-          case "safari" : browserType = playwright.webkit();
+          case "safari" : browserType = playwrightThread.get().webkit();
           break;
 
-          default: browserType = playwright.chromium();
+          default: browserType = playwrightThread.get().chromium();
 
       }
 
-
-      browser = browserType.launch(new BrowserType.LaunchOptions().setHeadless(isHeadless));
-
-      browserContext = browser.newContext();
-
-      page = browserContext.newPage();
+      browserThread.set(browserType.launch(new BrowserType.LaunchOptions().setHeadless(isHeadless)));
+      browserContextThread.set(browserThread.get().newContext());
+      pageThread.set(browserContextThread.get().newPage());
 
 
-      return page;
+      return pageThread.get();
 
   }
 
 
+  public static Page getPage(){
+      return pageThread.get();
+  }
+
+  public static Playwright getPlaywright(){
+      return playwrightThread.get();
+  }
+
   public  static void closebrowser(){
-      page.close();
-      browserContext.close();
-      browser.close();
-      playwright.close();
+      if(pageThread !=null) pageThread.get().close();
+      if(browserContextThread !=null) browserContextThread.get().close();
+      if(browserThread != null) browserThread.get().close();
+      if(playwrightThread !=null) playwrightThread.get().close();
+
+      pageThread.remove();
+      browserContextThread.remove();
+      browserThread.remove();
+      playwrightThread.remove();
   }
 
 
