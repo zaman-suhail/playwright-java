@@ -30,8 +30,8 @@ public class LoginTest extends BaseTest {
 
 
 
-        String username = ConfigReader.getProperty("username");
-        String password = ConfigReader.getProperty("password");
+         String username = prop.getProperty("username");
+         String password = prop.getProperty("password");
 
         loginPage = new LoginPage(page);
         productPage = new ProductPage(page);

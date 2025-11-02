@@ -2,9 +2,12 @@ package org.swaglabs.base;
 
 import com.microsoft.playwright.*;
 
+import org.swaglabs.factory.BrowserFactory;
 import org.swaglabs.utils.ConfigReader;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+
+import java.util.Properties;
 
 public class BaseTest {
 
@@ -12,26 +15,28 @@ public class BaseTest {
     protected Browser browser;
     protected   BrowserContext browserContext;
     protected Page page;
+    protected ConfigReader config;
+    protected Properties prop;
 
 
     @BeforeClass
     public void setup(){
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-        browserContext = browser.newContext();
-        page = browserContext.newPage();
 
-        String url = ConfigReader.getProperty("url");
-        page.navigate(url);
+        config = new ConfigReader();
+        prop = config.init_prop();
+
+        page = BrowserFactory.init_browser();
+
+        String url =  prop.getProperty("url");
+      page.navigate(url);
+
+
     }
 
 
     @AfterClass
     public void teardown(){
-        page.close();
-        browserContext.close();
-        browser.close();
-        playwright.close();
+        BrowserFactory.closebrowser();
 
     }
 
