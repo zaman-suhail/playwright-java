@@ -17,7 +17,7 @@ public class BrowserFactory {
 
 
 
-  public static Page init_browser(){
+  public static Page initBrowser(){
 
       config = new ConfigReader();
 
@@ -60,7 +60,7 @@ public class BrowserFactory {
       return playwrightThread.get();
   }
 
-  public  static void closebrowser(){
+  public  static void closeBrowser(){
       if(pageThread !=null) pageThread.get().close();
       if(browserContextThread !=null) browserContextThread.get().close();
       if(browserThread != null) browserThread.get().close();

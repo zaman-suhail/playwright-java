@@ -5,7 +5,9 @@ import com.microsoft.playwright.*;
 import org.swaglabs.factory.BrowserFactory;
 import org.swaglabs.utils.ConfigReader;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
 import java.util.Properties;
 
@@ -19,13 +21,13 @@ public class BaseTest {
     protected Properties prop;
 
 
-    @BeforeClass
+    @BeforeMethod
     public void setup(){
 
         config = new ConfigReader();
         prop = config.init_prop();
 
-        page = BrowserFactory.init_browser();
+        page = BrowserFactory.initBrowser();
 
         String url =  prop.getProperty("url");
       page.navigate(url);
@@ -34,9 +36,9 @@ public class BaseTest {
     }
 
 
-    @AfterClass
+    @AfterMethod
     public void teardown(){
-        BrowserFactory.closebrowser();
+        BrowserFactory.closeBrowser();
 
     }
 
