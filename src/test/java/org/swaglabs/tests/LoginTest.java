@@ -6,7 +6,7 @@ import org.testng.Assert;
 import org.swaglabs.base.BaseTest;
 import org.testng.annotations.Test;
 
-import java.net.URL;
+
 
 public class LoginTest extends BaseTest {
 
@@ -17,10 +17,9 @@ public class LoginTest extends BaseTest {
 
     @Test(priority = 1)
     public void verifyLoginPageLoadsSuccessfully(){
-        String url = ConfigReader.getProperty("URL");
 
         loginPage = new LoginPage(page);
-        page.navigate(url);
+
         Assert.assertTrue(loginPage.isLogoVisible());
     }
 
@@ -30,13 +29,12 @@ public class LoginTest extends BaseTest {
     public void loginWithValidCredentialsShouldNavigateToProductList() {
 
 
-        String url = ConfigReader.getProperty("URL");
-        String username = ConfigReader.getProperty("USER_NAME");
-        String password = ConfigReader.getProperty("PASSWORD");
+
+        String username = ConfigReader.getProperty("username");
+        String password = ConfigReader.getProperty("password");
 
         loginPage = new LoginPage(page);
         productPage = new ProductPage(page);
-        page.navigate(url);
         loginPage.login(username, password);
         Assert.assertTrue(productPage.isInventoryListVisible());
     }
